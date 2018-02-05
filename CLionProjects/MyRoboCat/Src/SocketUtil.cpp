@@ -5,6 +5,7 @@
 
 #include "MyRoboCatPCH.h"
 
+
 bool SocketUtil::StaticInit() {
     return true;
 }
@@ -42,7 +43,7 @@ TCPSocketPtr SocketUtil::CreateTCPSocket(SocketAddressFamily inFamily) {
     }
 }
 
-fd_set *SocketUtil::FillSetFromVector(fd_set &outSet, const vector<TCPSocketPtr> *inSockets, int &ioNaxNfds) {
+fd_set *SocketUtil::FillSetFromVector(fd_set &outSet, const std::vector<TCPSocketPtr> *inSockets, int &ioNaxNfds) {
     if (inSockets) {
         FD_ZERO(&outSet);
         for (const TCPSocketPtr &socket : *inSockets) {
@@ -55,7 +56,7 @@ fd_set *SocketUtil::FillSetFromVector(fd_set &outSet, const vector<TCPSocketPtr>
     }
 }
 
-void SocketUtil::FillVectorFromSet(vector<TCPSocketPtr> *outSockets, const vector<TCPSocketPtr> *inSockets,
+void SocketUtil::FillVectorFromSet(std::vector<TCPSocketPtr> *outSockets, const std::vector<TCPSocketPtr> *inSockets,
                                    const fd_set &inSet) {
     if (inSockets && outSockets) {
         outSockets->clear();
@@ -67,9 +68,9 @@ void SocketUtil::FillVectorFromSet(vector<TCPSocketPtr> *outSockets, const vecto
     }
 }
 
-int SocketUtil::Select(const vector<TCPSocketPtr> *inReadSet, vector<TCPSocketPtr> *outReadSet,
-                       const vector<TCPSocketPtr> *inWriteSet, vector<TCPSocketPtr> *outWriteSet,
-                       const vector<TCPSocketPtr> *inExceptSet, vector<TCPSocketPtr> *outExceptSet) {
+int SocketUtil::Select(const std::vector<TCPSocketPtr> *inReadSet, std::vector<TCPSocketPtr> *outReadSet,
+                       const std::vector<TCPSocketPtr> *inWriteSet, std::vector<TCPSocketPtr> *outWriteSet,
+                       const std::vector<TCPSocketPtr> *inExceptSet, std::vector<TCPSocketPtr> *outExceptSet) {
     fd_set read, write, except;
 
     int nfds = 0;
