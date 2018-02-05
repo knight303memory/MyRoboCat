@@ -9,7 +9,6 @@
 #include "TCPSocket.h"
 #include "UDPSocket.h"
 
-using std::vector;
 
 enum SocketAddressFamily {
     INET = AF_INET,
@@ -27,20 +26,23 @@ public:
 
     static int GetLastError();
 
-    static int Select(const vector<TCPSocketPtr> *inReadSet, vector<TCPSocketPtr> *outReadSet,
-                      const vector<TCPSocketPtr> *inWriteSet, vector<TCPSocketPtr> *outWriteSet,
-                      const vector<TCPSocketPtr> *inExceptSet, vector<TCPSocketPtr> *outExceptSet);
+    static int Select(const std::vector<TCPSocketPtr> *inReadSet, std::vector<TCPSocketPtr> *outReadSet,
+                      const std::vector<TCPSocketPtr> *inWriteSet, std::vector<TCPSocketPtr> *outWriteSet,
+                      const std::vector<TCPSocketPtr> *inExceptSet, std::vector<TCPSocketPtr> *outExceptSet);
 
     static UDPSocketPtr CreateUDPSocket(SocketAddressFamily inFamily);
 
     static TCPSocketPtr CreateTCPSocket(SocketAddressFamily inFamily);
 
 private:
-    inline static fd_set *FillSetFromVector(fd_set &outSet, const vector<TCPSocketPtr> *inSockets, int &ioNaxNfds);
+    inline static fd_set *FillSetFromVector(fd_set &outSet, const std::vector<TCPSocketPtr> *inSockets, int &ioNaxNfds);
 
     inline static void
-    FillVectorFromSet(vector<TCPSocketPtr> *outSockets, const vector<TCPSocketPtr> *inSockets, const fd_set &inSet);
+    FillVectorFromSet(std::vector<TCPSocketPtr> *outSockets, const std::vector<TCPSocketPtr> *inSockets,
+                      const fd_set &inSet);
 };
+
+
 
 
 #endif //MYROBOCAT_SOCKETUTIL_H

@@ -15,5 +15,8 @@ bool Engine::StaticInit() {
 
     RandGen::StaticInit();
 
+    SocketUtil::StaticInit();
+
+
 
 }

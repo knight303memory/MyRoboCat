@@ -12,6 +12,19 @@
 typedef int SOCKET;
 
 class UDPSocket {
+
+public:
+    ~UDPSocket();
+
+    int Bind(const SocketAddress &inToAddress);
+
+    int SendTo(const void *inToSend, size_t inLength, const SocketAddress &inToAdress);
+
+    int ReceiveFrom(void *inToReceive, int inMaxLength, SocketAddress &outFromAddress);
+
+    int SetNonBlockingMode(bool inShouldBeNonBlocking);
+
+
 private:
     friend class SocketUtil;
 
