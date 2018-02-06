@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include "GameObject.h"
 
 typedef GameObjectPtr (*GameObjectCreationFunc)();
 

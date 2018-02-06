@@ -55,6 +55,7 @@ class GameObject;
 #include "SocketUtil.h"
 #include "TCPSocket.h"
 #include "UDPSocket.h"
-
+#include "GameObject.h"
+#include "GameObjectRegistry.h"
 
 #endif //MYROBOCAT_MYROBOCATPCH_H

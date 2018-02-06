@@ -17,6 +17,6 @@ bool Engine::StaticInit() {
 
     SocketUtil::StaticInit();
 
-
+    GameObjectRegistry::StaticInit();
 
 }
