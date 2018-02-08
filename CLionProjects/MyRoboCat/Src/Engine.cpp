@@ -19,4 +19,15 @@ bool Engine::StaticInit() {
 
     GameObjectRegistry::StaticInit();
 
+    World::StaticInit();
+
+    ScoreBoardManager::StaticInit();
+
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
+
+    if (!WindowManager::StaticInit()) {
+        return false;
+    }
+
+    if ()
 }

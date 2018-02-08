@@ -1,0 +1,119 @@
+//
+// Created by Killua on 2018/2/8.
+//
+
+
+#include "MyRoboCatPCH.h"
+
+std::unique_ptr<ScoreBoardManager> ScoreBoardManager::sInstance = nullptr;
+
+void ScoreBoardManager::StaticInit() {
+    sInstance.reset(new ScoreBoardManager());
+}
+
+ScoreBoardManager::ScoreBoardManager() {
+    mDefaultColors.push_back(Colors::LightYellow);
+    mDefaultColors.push_back(Colors::LightBlue);
+    mDefaultColors.push_back(Colors::LightPink);
+    mDefaultColors.push_back(Colors::LightGreen);
+}
+
+
+ScoreBoardManager::Entry::Entry(uint32_t inPlayerId, const std::string &inPlayerName, const Vector3 &inColor)
+        : mPlayerId(inPlayerId), mPlayerName(inPlayerName) {
+    SetScore(0);
+}
+
+void ScoreBoardManager::Entry::SetScore(int inScore) {
+    mScore = inScore;
+
+    mFormattedNameScore = StringUtils::Sprintf("%s %i", mPlayerName.c_str(), mScore);
+}
+
+ScoreBoardManager::Entry *ScoreBoardManager::GetEntry(uint32_t inPlayerId) {
+    for (Entry &entry : mEntries) {
+        if (entry.GetPlayerId() == inPlayerId) {
+            return &entry;
+        }
+    }
+    return nullptr;
+}
+
+
+bool ScoreBoardManager::RemoveEntry(uint32_t inPlayerId) {
+    for (auto eIt = mEntries.begin(), endIt = mEntries.end(); eIt != endIt; ++eIt) {
+        if ((*eIt).GetPlayerId() == inPlayerId) {
+            mEntries.erase(eIt);
+            return true;
+        }
+    }
+    return false;
+}
+
+void ScoreBoardManager::AddEntry(uint32_t inPlayerId, const std::string &inPlayerName) {
+    RemoveEntry(inPlayerId);
+
+    mEntries.emplace_back(inPlayerId, inPlayerName, mDefaultColors[(inPlayerId - 1) % mDefaultColors.size()]);
+
+}
+
+void ScoreBoardManager::IncScore(uint32_t inPlayerId, int inAmount) {
+    Entry *entry = GetEntry(inPlayerId);
+    if (entry) {
+        entry->SetScore(entry->GetScore() + inAmount);
+    }
+
+}
+
+
+bool ScoreBoardManager::Write(OutputMemoryBitStream &inOutputStream) const {
+    int entryCount = static_cast<int>(mEntries.size());
+
+    inOutputStream.Write(entryCount);
+    for (const Entry &entry : mEntries) {
+        entry.Write(inOutputStream);
+    }
+
+    return true;
+}
+
+bool ScoreBoardManager::Read(InputMemoryBitStream &inInputStream) {
+    int entryCount;
+    inInputStream.Read(entryCount);
+
+    mEntries.resize(entryCount);
+    for (Entry &entry:mEntries) {
+        entry.Read(inInputStream);
+    }
+    return true;
+}
+
+
+bool ScoreBoardManager::Entry::Write(OutputMemoryBitStream &inOutputStream) const {
+    bool didSucceed = true;
+
+    inOutputStream.Write(mColor);
+    inOutputStream.Write(mPlayerId);
+    inOutputStream.Write(mPlayerName);
+    inOutputStream.Write(mScore);
+
+    return didSucceed;
+}
+
+bool ScoreBoardManager::Entry::Read(InputMemoryBitStream &inInputStream) {
+    bool didSucceed = true;
+
+    inInputStream.Read(mColor);
+    inInputStream.Read(mPlayerId);
+    inInputStream.Read(mPlayerName);
+
+    int score;
+    inInputStream.Read(score);
+    if (didSucceed) {
+        SetScore(score);
+    }
+
+    return didSucceed;
+}
+
+
