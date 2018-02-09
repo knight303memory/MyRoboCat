@@ -60,6 +60,10 @@ class GameObject;
 #include "World.h"
 #include "ScoreBoardManager.h"
 #include "WindowManager.h"
-
+#include "GraphicsDriver.h"
+#include "Texture.h"
+#include "TextureManager.h"
+#include "SpriteComponent.h"
 #include <SDL.h>
+
 #endif //MYROBOCAT_MYROBOCATPCH_H

@@ -29,5 +29,9 @@ bool Engine::StaticInit() {
         return false;
     }
 
-    if ()
+    if (!GraphicsDriver::StaticInit(WindowManager::sInstance->GetMainWindow())) {
+        return false;
+    }
+
+
 }
