@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <memory>
 #include "SocketAddress.h"
+#include "GameObject.h"
 
 class NetworkManager {
 public:
@@ -58,9 +59,77 @@ private:
 
     void TryAdvanceTurn();
 
+private:
     void ProcessPacketsHello(InputMemoryBitStream &inInputStream, const SocketAddress &inFromAddress);
-    
 
+    void HandleNotMPPacket(InputMemoryBitStream &inInputStream);
+
+    void HandleWelcomePacket(InputMemoryBitStream &inInputStream);
+
+    void ProcessPacketsLobby(InputMemoryBitStream &inInputStream, const SocketAddress &inFromAddress);
+
+    void HandleHelloPacket(InputMemoryBitStream &inInputStream, const SocketAddress &inFromAddress);
+
+    void HandleIntroPacket(InputMemoryBitStream &inInputStream, const SocketAddress &inFromAddress);
+
+    void HandleStartPacket(InputMemoryBitStream &inInputStream, const SocketAddress &inFromAddress);
+
+    void ProcessPacketsPlaying(InputMemoryBitStream &inInputStream, const SocketAddress &inFromAddress);
+
+    void HandleTurnPacket(InputMemoryBitStream &inInputStream, const SocketAddress &inFromAddress);
+
+    void ProcessPacketsDelay(InputMemoryBitStream &inInputStream, const SocketAddress &inFromAddress);
+
+public:
+    void HandleConnectionReset(const SocketAddress &inFromAddress);
+
+    void SendPacket(const OutputMemoryBitStream &inOutputStream, const SocketAddress &inToAddress);
+
+    void TryStartGame();
+
+    const WeightedTimedMovingAverage &GetBytesReceivedPerSecond() const { return }
+
+    const WeightedTimedMovingAverage &GetBytesSentPerSecond() const {
+
+    }
+
+    void SetDropPacketChance(float inChance) {
+        //todo
+    }
+
+    float GetDropPacketChance() const {
+        //todo
+    }
+
+    void SetSimulatedLatency(float inLatency) {
+        //todo
+    }
+
+    void GetSimulatedLatency() const {
+        //todo
+    }
+
+    bool IsMaterPeer() const {
+        //todo
+    }
+
+    float GetTimeToStart() const {
+        //todo
+    }
+
+    GameObjectPtr GetGameObject(uint32_t inNetworkId) const;
+
+    GameObjectPtr RegisterAndReturn(GameObject *inGameObject);
+
+    void UnregisterGameObject(GameObject *inGameObject);
+
+    NetworkManagerState GetState() const {
+        return mState;
+    }
+
+
+private:
+    
 };
 
 
