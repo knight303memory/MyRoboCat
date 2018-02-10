@@ -33,5 +33,9 @@ bool Engine::StaticInit() {
         return false;
     }
 
+    TextureManager::StaticInit();
+    RenderManager::StaticInit();
+
+
 
 }

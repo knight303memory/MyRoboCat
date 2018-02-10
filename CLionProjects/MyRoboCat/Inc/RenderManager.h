@@ -19,17 +19,18 @@ public:
 
     void RenderComponents();
 
-    void AddComponent();
+    void AddComponent(SpriteComponent *inComponent);
 
-    void RemoveComponent();
+    void RemoveComponent(SpriteComponent *inComponent);
 
-    int GetComponentIndex() const;
+    int GetComponentIndex(SpriteComponent *inComponent) const;
 
 private:
     RenderManager();
 
-    vector<>
+    std::vector<SpriteComponent *> mComponents;
 
+    SDL_Rect mViewTransform;
 };
 
 

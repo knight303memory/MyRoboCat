@@ -64,6 +64,13 @@ class GameObject;
 #include "Texture.h"
 #include "TextureManager.h"
 #include "SpriteComponent.h"
+#include "RenderManager.h"
+#include "InputAction.h"
+#include "InputManager.h"
+#include "MemoryBitStream.h"
+#include "Command.h"
+#include "CommandList.h"
+
 #include <SDL.h>
 
 #endif //MYROBOCAT_MYROBOCATPCH_H
