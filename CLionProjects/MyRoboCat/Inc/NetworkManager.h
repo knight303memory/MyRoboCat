@@ -8,8 +8,13 @@
 
 #include <cstdint>
 #include <memory>
+#include <map>
+#include <unordered_map>
+#include <queue>
 #include "SocketAddress.h"
 #include "GameObject.h"
+#include "UDPSocket.h"
+#include <string>
 
 class NetworkManager {
 public:
@@ -127,9 +132,130 @@ public:
         return mState;
     }
 
+    int GetPlayerCount() const {
+        return mPlayerCount;
+    }
+
+    int GetTurnNumber() const {
+        return mTurnNumber;
+    }
+
+    int GetSubTurnNumber() const {
+        return mSubTurnNumber;
+    }
+
+    uint32_t GetMyPlayerId() const {
+        return mPlayerId;
+    }
 
 private:
-    
+    void AddToNetworkIdToGameObjectMap(GameObjectPtr inGameObject);
+
+    void RemoveFromNetworkIdToGameObjectMap(GameObjectPtr inGameObject);
+
+    void RegisterGameObject(GameObjectPtr inGameObject);
+
+    uint32_t GetNewNetworkId();
+
+    uint32_t ComputerGlobalCRC();
+
+    bool InitAsMasterPeer(uint16_t inPort, const string &inName);
+
+    bool InitAsPeer(const SocketAddress &inMPAddress, const string &inName);
+
+    bool InitSocket(uint16_t inPort);
+
+
+    class ReceivedPacket {
+    public:
+        ReceivedPacket(float inReceivedTime, InputMemoryBitStream &inInputMemoryBitStream,
+                       const SocketAddress &inAddress);
+
+        const SocketAddress &GetFromAddress() const { mReceivedTime; }
+
+        float GetReceivedTime() const {
+            return mReceivedTime;
+        }
+
+
+        InputMemoryBitStream &GetPacketBuffer() {
+            return mPacketBuffer;
+        }
+
+    private:
+        float mReceivedTime;
+        InputMemoryBitStream mPacketBuffer;
+        SocketAddress mFromAddress;
+
+    };
+
+    void UpdateBytesSentLastFrame();
+
+    void ReadIncomingPacketsIntoQueue();
+
+    void ProcessQueuePackets();
+
+    void UpdateHigestPlayerId(uint32_t inId);
+
+    void EnterPlayingState();
+
+    void SpawnCat(uint32_t inPlayerId, const Vector3 &inSpawnVec);
+
+    typedef std::map<uint32_t, SocketAddress> IntToSocketAddrMap;
+    typedef std::map<uint32_t, string> IntToStrMap;
+    typedef std::map<uint32_t, TurnData> IntToTurnDataMap;
+    typedef std::map<uint32_t, GameObjectPtr> IntToGameObjectMap;
+    typedef std::map<uint32_t, GameObjectPtr> IntToGameObjectMap;
+    typedef std::unordered_map<SocketAddress, uint32_t> SocketAddrToIntMap;
+
+    bool CheckSync(IntToTurnDataMap &inTurnMap);
+
+    std::queue<ReceivedPacket, std:: < ReceivedPacket>> mPacketQueue;
+    IntToGameObjectMap mNetworkIdToGameObjectMap;
+    IntToSocketAddrMap mPlayerToSocketMap;
+    SocketAddrToIntMap mSocketToPlayerMap;
+    IntToStrMap mPlayerNameMap;
+
+    std::vector<IntToTurnDataMap> mTurnData;
+
+    UDPSocketPtr mSocket;
+    SocketAddress mMasterPeerAddr;
+
+    WeightedTimedMovingAverage mBytesReceivedPerSecond;
+    WeightedTimedMovingAverage mBytesSentPerSecond;
+    NetworkManagerState mState;
+
+    int mBytesSentThisFrame;
+
+    std::string mName;
+    float mDropPacketChance;
+    float mSimulatedLatency;
+    float mTimeOfLastHello;
+    float mTimeToStart;
+
+    int mPlayerCount;
+
+    uint32_t mHightestPlayerId;
+    uint32_t mNewNetworkid;
+    uint32_t mPlayerId;
+
+    int mTurnNumber;
+    int mSubTurnNumber;
+    bool mIsMasterPeer;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 };
 
 
