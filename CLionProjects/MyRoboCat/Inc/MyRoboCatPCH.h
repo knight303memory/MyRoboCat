@@ -70,7 +70,7 @@ class GameObject;
 #include "MemoryBitStream.h"
 #include "Command.h"
 #include "CommandList.h"
-
+#include "NetworkManager.h"
 #include <SDL.h>
 
 #endif //MYROBOCAT_MYROBOCATPCH_H

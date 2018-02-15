@@ -236,7 +236,7 @@ private:
     int mPlayerCount;
 
     uint32_t mHightestPlayerId;
-    uint32_t mNewNetworkid;
+    uint32_t mNewNetworkId;
     uint32_t mPlayerId;
 
     int mTurnNumber;
