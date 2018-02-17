@@ -120,7 +120,7 @@ void NetworkManager::SendOutgoingPackets() {
 }
 
 void NetworkManager::UpdateSayingHello(bool inForce) {
-    
+    float time =
 }
 
 

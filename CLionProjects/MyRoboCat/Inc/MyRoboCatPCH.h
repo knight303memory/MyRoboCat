@@ -72,5 +72,8 @@ class GameObject;
 #include "CommandList.h"
 #include "NetworkManager.h"
 #include <SDL.h>
+#include "Timing.h"
+#include "TurnData.h"
+
 
 #endif //MYROBOCAT_MYROBOCATPCH_H
