@@ -62,6 +62,9 @@ public:
         }
     }
 
+    void Write(const Vector3 &inVector);
+
+    void Write(const Quaternion &inQuat);
 private:
     void ReallocBuffer(uint32_t inNewBitCapacity);
 
@@ -112,7 +115,42 @@ public:
         ReadBits(&inData, inBitCount);
     }
 
-    void Read() {}
+    void Read(uint32_t &outData, uint32_t inBitCount = 32) {
+        ReadBits(&outData, inBitCount);
+    }
+
+    void Read(int &outData, uint32_t inBitCount = 32) {
+        ReadBits(&outData, inBitCount);
+    }
+
+    void Read(float &outData) {
+        ReadBits(&outData, 32);
+    }
+
+    void Read(uint16_t &outData, uint32_t inBitCount = 16) {
+        ReadBits(&outData, inBitCount);
+    }
+
+    void Read(int16_t &outData, uint32_t inBitCount = 16) {
+        ReadBits(&outData, inBitCount);
+    }
+
+
+    void Read(uint8_t &outData, uint32_t inBitCount = 8) {
+        ReadBits(&outData, inBitCount);
+    }
+
+    void Read(bool &outData) {
+        ReadBits(&outData, 1);
+    }
+
+    void Read(Quaternion &outQuat);
+
+    void ResetToCapacity(uint32_t inByteCapacity) {
+        mBitCapacity = inByteCapacity << 3;
+        mBitHead = 0;
+    }
+
 
 
     void Read(std::string &inString) {

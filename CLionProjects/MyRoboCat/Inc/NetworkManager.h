@@ -110,7 +110,7 @@ public:
         //todo
     }
 
-    void GetSimulatedLatency() const {
+    float GetSimulatedLatency() const {
         //todo
     }
 
