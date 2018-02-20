@@ -44,5 +44,10 @@ void Command::Write(OutputMemoryBitStream &inOutputStream) {
 
 std::shared_ptr<AttackCommand> AttackCommand::StaticCreate(uint32_t inMyNetId, uint32_t inTargetNetId) {
     AttackCommandPtr retVal;
-    GameObjectPtr me =
+    GameObjectPtr me = NetworkManager::sInstance->GetGameObject(inMyNetId);
+    GameObjectPtr target = NetworkManager::sInstance->GetGameObject(inTargetNetId);
+
+    uint32_t playerId = NetworkManager::sInstance->GetMyPlayerId();
+    if (me && me->GetClassId() == MyRoboCat)
+
 }

@@ -14,6 +14,8 @@
 #include "SocketAddress.h"
 #include "GameObject.h"
 #include "UDPSocket.h"
+#include "TurnData.h"
+#include "WeightedTimeMovingAverage.h"
 #include <string>
 
 class NetworkManager {
@@ -50,7 +52,6 @@ public:
 
     void SendOutgoingPackets();
 
-    void ProcessPacket(InputMemoryBitStream &inInputStream, const SocketAddress &inFromAddress);
 
 private:
 
@@ -63,6 +64,10 @@ private:
     void UpdateSendTurnPacket();
 
     void TryAdvanceTurn();
+
+public:
+    void ProcessPacket(InputMemoryBitStream &inInputStream, const SocketAddress &inFromAddress);
+
 
 private:
     void ProcessPacketsHello(InputMemoryBitStream &inInputStream, const SocketAddress &inFromAddress);
@@ -92,34 +97,34 @@ public:
 
     void TryStartGame();
 
-    const WeightedTimedMovingAverage &GetBytesReceivedPerSecond() const { return }
+    const WeightedTimeMovingAverage &GetBytesReceivedPerSecond() const { return mBytesReceivedPerSecond; }
 
-    const WeightedTimedMovingAverage &GetBytesSentPerSecond() const {
-
+    const WeightedTimeMovingAverage &GetBytesSentPerSecond() const {
+        return mBytesSentPerSecond;
     }
 
     void SetDropPacketChance(float inChance) {
-        //todo
+        mDropPacketChance = inChance;
     }
 
     float GetDropPacketChance() const {
-        //todo
+        return mDropPacketChance;
     }
 
     void SetSimulatedLatency(float inLatency) {
-        //todo
+        mSimulatedLatency = inLatency;
     }
 
     float GetSimulatedLatency() const {
-        //todo
+        return mSimulatedLatency;
     }
 
     bool IsMaterPeer() const {
-        //todo
+        return mIsMasterPeer;
     }
 
     float GetTimeToStart() const {
-        //todo
+        return mTimeToStart;
     }
 
     GameObjectPtr GetGameObject(uint32_t inNetworkId) const;
@@ -210,7 +215,7 @@ private:
 
     bool CheckSync(IntToTurnDataMap &inTurnMap);
 
-    std::queue<ReceivedPacket, std:: < ReceivedPacket>> mPacketQueue;
+    std::queue<ReceivedPacket, <ReceivedPacket>> mPacketQueue;
     IntToGameObjectMap mNetworkIdToGameObjectMap;
     IntToSocketAddrMap mPlayerToSocketMap;
     SocketAddrToIntMap mSocketToPlayerMap;
@@ -221,8 +226,8 @@ private:
     UDPSocketPtr mSocket;
     SocketAddress mMasterPeerAddr;
 
-    WeightedTimedMovingAverage mBytesReceivedPerSecond;
-    WeightedTimedMovingAverage mBytesSentPerSecond;
+    WeightedTimeMovingAverage mBytesReceivedPerSecond;
+    WeightedTimeMovingAverage mBytesSentPerSecond;
     NetworkManagerState mState;
 
     int mBytesSentThisFrame;
@@ -242,16 +247,6 @@ private:
     int mTurnNumber;
     int mSubTurnNumber;
     bool mIsMasterPeer;
-
-
-
-
-
-
-
-
-
-
 
 
 };
